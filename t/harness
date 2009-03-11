@@ -1,0 +1,8 @@
+#! perl
+
+# $Id: harness 24466 2008-01-03 04:43:35Z coke $
+
+use FindBin;
+use lib qw( . lib ../lib ../../lib );
+use Parrot::Test::Harness language => 'lolcode', compiler => 'lolcode.pbc';
+
