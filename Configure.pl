@@ -1,5 +1,5 @@
 # Copyright (C) 2009, Parrot Foundation.
-# $Id: Configure.pl 36945 2009-02-23 19:35:13Z fperrad $
+# $Id$
 
 use strict;
 use warnings;
