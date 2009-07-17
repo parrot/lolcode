@@ -12,11 +12,11 @@ say.pir -- simple implementation of a say function
     .param pmc args            :slurpy
     .local int no_newline
     no_newline = 0
-    .local pmc iter
-    iter = new 'Iterator', args
+    .local pmc it
+    it = iter args
   iter_loop:
-    unless iter goto iter_end
-    $S0 = shift iter
+    unless it goto iter_end
+    $S0 = shift it
     $I0 = iseq $S0, '!'
     if $I0 goto no_print
     print $S0
