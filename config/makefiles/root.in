@@ -65,9 +65,9 @@ BUILD_CLEANUPS := \
 TEST_CLEANUPS :=
 
 # the default target
-build: lolcode.pbc
-
 all: build lolcode@exe@ installable
+
+build: lolcode.pbc
 
 lolcode.pbc: $(SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o lolcode.pbc lolcode.pir
