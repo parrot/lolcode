@@ -46,7 +46,7 @@ No Configure step, no Makefile generated.
 
     $P3 = new 'Hash'
     $P4 = split "\n", <<'SOURCES'
-lolcode.pir
+src/lolcode.pir
 src/gen_grammar.pir
 src/parser/yarn_literal.pir
 src/gen_actions.pir
@@ -56,7 +56,8 @@ src/builtins/expr_parse.pir
 src/builtins/math.pir
 src/builtins/say.pir
 SOURCES
-    $P3['lolcode.pbc'] = $P4
+    $P3['lolcode/lolcode.pbc'] = $P4
+    $P3['lolcode.pbc'] = 'lolcode.pir'
     $P0['pbc_pir'] = $P3
 
     $P5 = new 'Hash'
@@ -67,6 +68,9 @@ SOURCES
     $S0 = get_parrot()
     $S0 .= ' lolcode.pbc'
     $P0['prove_exec'] = $S0
+
+    # install
+    $P0['inst_lang'] = 'lolcode/lolcode.pbc'
 
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
