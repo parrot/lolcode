@@ -6,7 +6,6 @@
     "general"      : {
         "name"     : "lolcode",
         "abstract" : "Lolcode",
-        "authority": "AUTHORITY",
         "version"  : "HEAD",
         "license"  : {
             "type" : "Artistic License 2.0",
