@@ -1,3 +1,6 @@
+
+.namespace []
+
 .sub 'SUM OF'
     .param pmc x
     .param pmc y

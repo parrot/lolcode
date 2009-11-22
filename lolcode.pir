@@ -25,8 +25,6 @@ object.
 
 .namespace [ 'lolcode';'Compiler' ]
 
-.loadlib 'lolcode_group'
-
 .sub '' :anon :load :init
     load_bytecode 'PCT.pbc'
     .local pmc parrotns, lolns, exports
@@ -36,7 +34,7 @@ object.
     parrotns.'export_to'(lolns, exports)
 .end
 
-.include 'src/gen_builtins.pir'
+.include 'src/builtins.pir'
 .include 'src/gen_grammar.pir'
 .include 'src/parser/yarn_literal.pir'
 .include 'src/gen_actions.pir'

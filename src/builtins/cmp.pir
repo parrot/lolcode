@@ -1,3 +1,6 @@
+
+.namespace []
+
 .sub 'BOTH SAEM'
     .param pmc x
     .param pmc y
