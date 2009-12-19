@@ -71,6 +71,9 @@ SOURCES
     # install
     $P0['inst_lang'] = 'lolcode/lolcode.pbc'
 
+    # dist
+    $P0['doc_files'] = 'TODO'
+
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
 
