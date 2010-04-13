@@ -6,3 +6,6 @@ ticketing system, whatever that may be.
 
 #52178: [TODO] Improve variable declarations in LOLCODE
   http://rt.perl.org/rt3/Ticket/Display.html?id=52178
+
+--
+01-vars.t's final test is failing.
