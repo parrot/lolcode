@@ -41,7 +41,7 @@ No Configure step, no Makefile generated.
 
     $P2 = new 'Hash'
     $P2['src/gen_actions.pir'] = 'src/parser/actions.pm'
-    $P0['pir_nqp'] = $P2
+    $P0['pir_nqprx'] = $P2
 
     $P3 = new 'Hash'
     $P4 = split "\n", <<'SOURCES'

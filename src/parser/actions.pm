@@ -152,7 +152,7 @@ method ifthen($/) {
     $bind.push( $it );
     $bind.push( $expr );
     $past.unshift( $it );
-    my $past := PAST::Stmts.new( $bind, $past, :node( $/ ) );
+    $past := PAST::Stmts.new( $bind, $past, :node( $/ ) );
     make $past;
 }
 
@@ -189,7 +189,7 @@ method switch($/) {
     #$bind.push( $it );
     #$bind.push( $expr );
     #$past.unshift( $it );
-    my $past := PAST::Stmts.new( $past, :node( $/ ) );
+    $past := PAST::Stmts.new( $past, :node( $/ ) );
     make $past;
 }
 
@@ -285,7 +285,7 @@ method expression($/) {
     my $mkay := 'mkay';
 
     for $<tokens> {
-        if($_<identifier>) {
+        if $_<identifier> {
             my $name := ~$_<identifier>;
             my $item := get_item($name);
             if is_sub($name) {
