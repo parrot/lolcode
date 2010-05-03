@@ -18,7 +18,7 @@ value of the comment is passed as the second argument to the method.
 class lolcode::Grammar::Actions;
 
 method TOP($/) {
-    my $block := $( $<block> );
+    my $block := $<block>.ast;
     $block.symbol('IT', :scope('lexical'));
     my $it := PAST::Var.new( :name( 'IT' ), :scope('lexical'), :viviself('Undef'), :isdecl(1));
     $block.unshift($it);
@@ -32,11 +32,11 @@ method statement ($/, $key) {
         my $it := PAST::Var.new( :name( 'IT' ), :scope('lexical'), :viviself('Undef'));
         my $past := PAST::Op.new( :pasttype('bind'), :node( $/ ) );
         $past.push( $it );
-        $past.push( $( $<expression> ) );
+        $past.push( $<expression>.ast );
         make $past;
     }
     else {
-        make $( $/{$key} ); # For now
+        make $/{$key}.ast; # For now
     }
 }
 
@@ -69,7 +69,7 @@ method declare($/) {
         # XXX Someone clever needs to refactor this into C<assign>
         my $past := PAST::Op.new( :pasttype('bind'), :node( $/ ) );
         $past.push( $var );
-        $past.push( $( $<expression>[0] ) );
+        $past.push( $<expression>[0].ast );
         make $past;
     }
     else {
@@ -79,8 +79,8 @@ method declare($/) {
 
 method assign($/) {
     my $past := PAST::Op.new( :pasttype('bind'), :node( $/ ) );
-    $past.push( $( $<variable> ) );
-    $past.push( $( $<expression> ) );
+    $past.push( $<variable>.ast );
+    $past.push( $<expression>.ast );
     make $past;
 }
 
@@ -93,14 +93,14 @@ method function($/,$key) {
         # if there are any parameters, get the PAST for each of them and
         # adjust the scope to parameter.
         for $<parameters> {
-            my $param := PAST::Var.new(:name(~$_<identifier>), :scope('parameter'), :node($($_)));
+            my $param := PAST::Var.new(:name(~$_<identifier>), :scope('parameter'), :node($_.ast));
             $param.isdecl(1);
             $arglist.push($param);
         }
         $?BLOCK_SIGNATURE := $arglist;
     }
     elsif $key eq 'block' {
-        my $block := $( $<block> );
+        my $block := $<block>.ast;
         $block.blocktype('declaration');
         $?BLOCK.symbol(~$<variable><identifier>, :arity($block.arity()));
 
@@ -112,8 +112,8 @@ method function($/,$key) {
         $block.name(~$<variable><identifier>);
         make $block;
         #my $past := PAST::Op.new( :pasttype('bind'), :node( $/ ) );
-        #$($<variable>).isdecl(1);
-        #$past.push( $( $<variable> ) );
+        #$<variable>.ast.isdecl(1);
+        #$past.push( $<variable>.ast );
         #$past.push( $block );
         #make $past;
     }
@@ -124,22 +124,22 @@ method function($/,$key) {
 
 method ifthen($/) {
     my $count := +$<expression> - 1;
-    my $expr  := $( $<expression>[$count] );
-    my $then  := $( $<block>[$count] );
+    my $expr  := $<expression>[$count].ast;
+    my $then  := $<block>[$count].ast;
     $then.blocktype('immediate');
     my $past := PAST::Op.new( $expr, $then,
                               :pasttype('if'),
                               :node( $/ )
                             );
     if ( $<else> ) {
-        my $else := $( $<else>[0] );
+        my $else := $<else>[0].ast;
         $else.blocktype('immediate');
         $past.push( $else );
     }
     while ($count != 0) {
         $count := $count - 1;
-        $expr  := $( $<expression>[$count] );
-        $then  := $( $<block>[$count] );
+        $expr  := $<expression>[$count].ast;
+        $then  := $<block>[$count].ast;
         $then.blocktype('immediate');
         $past  := PAST::Op.new( $expr, $then, $past,
                                :pasttype('if'),
@@ -158,8 +158,8 @@ method ifthen($/) {
 
 method switch($/) {
     my $count := +$<value> - 1;
-    my $val  := $( $<value>[$count] );
-    my $then  := $( $<block>[$count] );
+    my $val  := $<value>[$count].ast;
+    my $then  := $<block>[$count].ast;
     my $it := PAST::Var.new( :name( 'IT' ), :scope('lexical'), :viviself('Undef'));
     my $expr := PAST::Op.new(:pasttype('call'), :name('BOTH SAEM'), $it, $val);
     $then.blocktype('immediate');
@@ -168,15 +168,15 @@ method switch($/) {
                               :node( $/ )
                             );
     if ( $<else> ) {
-        my $else := $( $<else>[0] );
+        my $else := $<else>[0].ast;
         $else.blocktype('immediate');
         $past.push( $else );
     }
     while ($count != 0) {
         $count := $count - 1;
-        $val  := $( $<value>[$count] );
+        $val  := $<value>[$count].ast;
         $expr := PAST::Op.new(:pasttype('call'), :name('BOTH SAEM'), $it, $val);
-        $then  := $( $<block>[$count] );
+        $then  := $<block>[$count].ast;
         $then.blocktype('immediate');
         $past  := PAST::Op.new( $expr, $then, $past,
                                :pasttype('if'),
@@ -214,7 +214,7 @@ method block($/,$key) {
         $?BLOCK := @?BLOCK[0];
         my $stmts := PAST::Stmts.new( :node( $/ ) );
         for $<statement> {
-            $stmts.push( $( $_ ) );
+            $stmts.push( $_.ast );
         }
         $past.push($stmts);
         make $past;
@@ -222,7 +222,7 @@ method block($/,$key) {
 }
 
 method value($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast;
 }
 
 method bang($/) {
@@ -301,7 +301,7 @@ method expression($/) {
             }
         }
         else {
-            my $item := $( $_ );
+            my $item := $_.ast;
             @vals.push($item);
             if defined(@arity[0]) {@arity[0]--};
         }
@@ -348,7 +348,7 @@ method boolean($/) {
 }
 
 method quote($/) {
-    make PAST::Val.new( :value( $($<yarn_literal>) ), :node($/) );
+    make PAST::Val.new( :value( $<yarn_literal>.ast ), :node($/) );
 }
 
 
