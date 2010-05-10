@@ -65,7 +65,7 @@ method declare($/) {
     }
 
     if ($<expression>) {
-        $var.isdecl(1);
+        # $var.isdecl(1);
         # XXX Someone clever needs to refactor this into C<assign>
         my $past := PAST::Op.new( :pasttype('bind'), :node( $/ ) );
         $past.push( $var );
