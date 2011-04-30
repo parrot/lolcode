@@ -1,0 +1,15 @@
+MANIFEST
+
+src/gen_*.pir
+*.pbc
+*.c
+*.o
+*.obj
+*.exe
+*.iss
+installable_lolcode
+
+*.tar.gz
+*.zip
+*.patch
+
