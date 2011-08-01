@@ -63,6 +63,10 @@ SOURCES
     $P5['parrot-lolcode'] = 'lolcode.pbc'
     $P0['installable_pbc'] = $P5
 
+    $P6 = new 'Hash'
+    $P6['man/man1/parrot-lolcode.1'] = 'lolcode.pod'
+    $P0['man_pod'] = $P6
+
     # test
     $S0 = get_parrot()
     $S0 .= ' lolcode.pbc'
